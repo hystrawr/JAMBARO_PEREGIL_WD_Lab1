@@ -9,7 +9,7 @@ export default function CartDrawer() {
 
   
   const handleCheckout = () => {
-    alert('Thank you for your purchase! Your order has been placed and shipped out successfully. 🚀');
+    alert('Thank you for your purchase! Your order has been placed and shipped out successfully.');
     dispatch({ type: 'CLEAR_CART' });
     dispatch({ type: 'TOGGLE_CART', payload: false });
   };
