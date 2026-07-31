@@ -20,7 +20,6 @@ function shopReducer(state: State, action: Action): State {
   const existingItemIndex = state.cart.findIndex((item) => item.id === action.payload.id);
 
   if (existingItemIndex > -1) {
-    // Create a brand new array AND new object copies using .map()
     const updatedCart = state.cart.map((item, index) =>
       index === existingItemIndex
         ? { ...item, quantity: item.quantity + 1 }

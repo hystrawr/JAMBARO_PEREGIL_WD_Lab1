@@ -4,7 +4,6 @@ import { Product } from '../types';
 
 export default function ProductGrid() {
   const { state, dispatch } = useShop();
-  // Simple state to store the currently selected product for the modal
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const filteredProducts = state.products
@@ -26,7 +25,6 @@ export default function ProductGrid() {
 
   return (
     <div className="p-6 relative">
-      {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {filteredProducts.map((product) => (
           <div
@@ -50,7 +48,7 @@ export default function ProductGrid() {
                 </span>
                 <button
                   onClick={(e) => {
-                    e.stopPropagation(); // Prevents modal from popping up when clicking 'Add to Cart'
+                    e.stopPropagation(); 
                     dispatch({ type: 'ADD_TO_CART', payload: product });
                   }}
                   className="bg-pink-500 hover:bg-pink-600 text-white font-bold px-3 py-1.5 rounded-md text-xs transition-colors"
@@ -63,25 +61,20 @@ export default function ProductGrid() {
         ))}
       </div>
 
-      {/* Pop-up Modal (Rendered right inside ProductGrid) */}
       {selectedProduct && (
         <div 
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
-          onClick={() => setSelectedProduct(null)} // Close when clicking backdrop
+          onClick={() => setSelectedProduct(null)} 
         >
           <div 
             className="bg-zinc-950 border border-zinc-800 p-6 rounded-2xl max-w-md w-full shadow-2xl relative"
-            onClick={(e) => e.stopPropagation()} // Prevent close when clicking inside modal
+            onClick={(e) => e.stopPropagation()} 
           >
-            {/* Close Button */}
             <button
               onClick={() => setSelectedProduct(null)}
               className="absolute top-4 right-4 text-zinc-400 hover:text-white text-lg font-bold"
             >
-            
             </button>
-
-            {/* Modal Content */}
             <div className="bg-white p-4 rounded-xl mb-4 flex justify-center items-center h-60 w-full overflow-hidden">
               <img
                 src={selectedProduct.image}

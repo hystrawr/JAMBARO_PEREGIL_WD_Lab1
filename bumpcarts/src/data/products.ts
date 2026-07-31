@@ -1,7 +1,6 @@
 import { Product } from '../types';
 
 export const products: Product[] = [
-  // Mouse
   {
     id: 'M1',
     name: 'Logitech M650 Wireless Mouse',
@@ -18,8 +17,6 @@ export const products: Product[] = [
     image: '/image/deathadder.svg',
     inStock: true,
   },
-
-  // Keyboard
   {
     id: 'K1',
     name: 'Keychron K2 Wireless Mechanical Keyboard',
@@ -36,8 +33,6 @@ export const products: Product[] = [
     image: '/image/logiGPro.svg',
     inStock: true,
   },
-
-  // Microphone
   {
     id: 'MC1',
     name: 'HyperX QuadCast S RGB USB Condenser Mic',
@@ -54,8 +49,6 @@ export const products: Product[] = [
     image: '/image/RodeMic.svg',
     inStock: true,
   },
-
-  // Headset
   {
     id: 'H1',
     name: 'SteelSeries Arctis Nova Pro Wireless',
@@ -72,8 +65,6 @@ export const products: Product[] = [
     image: '/image/HyperCloud.svg',
     inStock: true,
   },
-
-  // Monitor
   {
     id: 'MON1',
     name: 'ASUS TUF Gaming 27" 165Hz Monitor',

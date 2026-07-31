@@ -15,8 +15,7 @@ export default function Navbar() {
         <div className="flex-1 w-full max-1-3xl mx-6">
           <FilterBar />
         </div>
-        
-        {/* Cart Icon Button */}
+
         <button
           onClick={() => dispatch({ type: 'TOGGLE_CART' })}
           className="relative cursor-pointer p-2 rounded-lg hover:bg-zinc-900 transition-colors focus:outline-none"

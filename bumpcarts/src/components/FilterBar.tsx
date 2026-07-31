@@ -1,4 +1,3 @@
-// src/components/FilterBar.tsx
 import React from 'react';
 import { useShop } from '../context/ShopContext';
 
@@ -10,7 +9,6 @@ export default function FilterBar() {
 
   return (
     <div className="flex flex-wrap items-center gap-4 p-4 bg-zinc-950">
-      {/* Search Bar */}
       <div className="relative flex-1 min-w-[220px]">
         <input
           type="text"
@@ -24,7 +22,6 @@ export default function FilterBar() {
         </svg>
       </div>
 
-      {/* Category Dropdown */}
       <select
         value={filters.category}
         onChange={(e) => dispatch({ type: 'SET_CATEGORY', payload: e.target.value === 'All' ? '' : e.target.value })}
@@ -37,7 +34,6 @@ export default function FilterBar() {
         ))}
       </select>
 
-      {/* Price Range Slider */}
       <div className="flex items-center gap-3 bg-zinc-900 px-3 py-1.5 rounded-lg border border-zinc-800 text-xs text-zinc-400">
         <span>Max Price:</span>
         <input
@@ -54,7 +50,6 @@ export default function FilterBar() {
         </span>
       </div>
 
-      {/* Price Sort Dropdown */}
       <select
         value={filters.sortBy}
         onChange={(e) => dispatch({ type: 'SET_SORT', payload: e.target.value as 'default' | 'price-asc' | 'price-desc' })}

@@ -7,7 +7,7 @@ export default function CartDrawer() {
   const shippingFee = state.cart.length > 0 ? 150 : 0;
   const grandTotal = subtotal + shippingFee;
 
-  // Checkout handler
+  
   const handleCheckout = () => {
     alert('Thank you for your purchase! Your order has been placed and shipped out successfully. 🚀');
     dispatch({ type: 'CLEAR_CART' });
@@ -18,16 +18,12 @@ export default function CartDrawer() {
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-sm">
-      {/* Backdrop */}
       <div 
         className="flex-1" 
         onClick={() => dispatch({ type: 'TOGGLE_CART', payload: false })} 
       />
 
-      {/* Cart Container */}
       <div className="w-full max-w-md bg-zinc-950 text-white h-full flex flex-col justify-between border-l border-zinc-800 p-6 shadow-2xl relative overflow-y-auto">
-        
-        {/* Top Header */}
         <div>
           <div className="flex items-center justify-between pb-6 border-b border-pink-500/30">
             <div className="flex items-center gap-3">
@@ -61,8 +57,6 @@ export default function CartDrawer() {
               ✕
             </button>
           </div>
-
-          {/* Cart Item List */}
           <div className="mt-6 flex flex-col divide-y divide-pink-500/30">
             {state.cart.length === 0 ? (
               <p className="text-zinc-500 text-center py-10">Your cart is empty.</p>
@@ -139,7 +133,6 @@ export default function CartDrawer() {
           </div>
         </div>
 
-        {/* Totals & Checkout Button */}
         <div className="border-t border-pink-500/40 pt-4 mt-6">
           <div className="flex justify-between text-sm text-zinc-300 mb-1">
             <span>Subtotal</span>
@@ -160,7 +153,6 @@ export default function CartDrawer() {
             </span>
           </div>
 
-          {/* Connected handleCheckout here */}
           <button
             onClick={handleCheckout}
             disabled={state.cart.length === 0}
