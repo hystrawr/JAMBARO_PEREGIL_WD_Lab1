@@ -34,4 +34,4 @@ export type Action =
   | { type: 'SET_CATEGORY'; payload: string }
   | { type: 'SET_SORT'; payload: string }
   | { type: 'TOGGLE_CART'; payload?: boolean }
-  | { type: 'SET_MAX_PRICE'; payload: number }; 
+  | { type: 'SET_MAX_PRICE'; payload: number }
