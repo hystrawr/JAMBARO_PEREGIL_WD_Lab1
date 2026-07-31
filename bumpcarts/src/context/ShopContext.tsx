@@ -1,65 +1,57 @@
-import { createContext, useContext, useReducer, type ReactNode } from 'react';
-import type { State, Action, CartItem } from '../types';
-import { products as productData } from '../data/products';
+import React, { createContext, useContext, useReducer, ReactNode } from 'react';
+import { State, Action, Product } from '../types';
+import { products as initialProducts } from '../data/products';
 
-export type ShopState = State;
-
-const initialState: ShopState = {
-  products: productData,
+const initialState: State = {
+  products: initialProducts,
   cart: [],
   filters: {
     searchQuery: '',
     category: '',
-    maxPrice: Infinity,
+    maxPrice: 20000,
     sortBy: 'default',
   },
   isCartOpen: false,
 };
 
-function shopReducer(state: ShopState, action: Action): ShopState {
+function shopReducer(state: State, action: Action): State {
   switch (action.type) {
     case 'ADD_TO_CART': {
-      const product = action.payload;
-      const existing = state.cart.find((item: CartItem) => item.id === product.id);
+  const existingItemIndex = state.cart.findIndex((item) => item.id === action.payload.id);
 
-      if (existing) {
-        return {
-          ...state,
-          cart: state.cart.map((item: CartItem) =>
-            item.id === product.id
-              ? { ...item, quantity: item.quantity + 1 }
-              : item
-          ),
-        };
-      }
+  if (existingItemIndex > -1) {
+    // Create a brand new array AND new object copies using .map()
+    const updatedCart = state.cart.map((item, index) =>
+      index === existingItemIndex
+        ? { ...item, quantity: item.quantity + 1 }
+        : item
+    );
+    return { ...state, cart: updatedCart };
+  }
 
+  return {
+    ...state,
+    cart: [...state.cart, { ...action.payload, quantity: 1 }],
+  };
+}
+
+    case 'REMOVE_FROM_CART':
       return {
         ...state,
-        cart: [...state.cart, { ...product, quantity: 1 }],
+        cart: state.cart.filter((item) => item.id !== action.payload),
       };
-    }
-
-    case 'REMOVE_FROM_CART': {
-      const id = action.payload;
-      return {
-        ...state,
-        cart: state.cart.filter((item: CartItem) => item.id !== id),
-      };
-    }
 
     case 'UPDATE_QUANTITY': {
       const { id, quantity } = action.payload;
       if (quantity <= 0) {
         return {
           ...state,
-          cart: state.cart.filter((item: CartItem) => item.id !== id),
+          cart: state.cart.filter((item) => item.id !== id),
         };
       }
       return {
         ...state,
-        cart: state.cart.map((item: CartItem) =>
-          item.id === id ? { ...item, quantity } : item
-        ),
+        cart: state.cart.map((item) => (item.id === id ? { ...item, quantity } : item)),
       };
     }
 
@@ -67,54 +59,69 @@ function shopReducer(state: ShopState, action: Action): ShopState {
       return { ...state, cart: [] };
 
     case 'SET_SEARCH_QUERY':
-      return { ...state, filters: { ...state.filters, searchQuery: action.payload } };
+      return {
+        ...state,
+        filters: { ...state.filters, searchQuery: action.payload },
+      };
 
     case 'SET_CATEGORY':
-      return { ...state, filters: { ...state.filters, category: action.payload } };
+      return {
+        ...state,
+        filters: { ...state.filters, category: action.payload },
+      };
 
     case 'SET_SORT':
-      return { ...state, filters: { ...state.filters, sortBy: action.payload as State['filters']['sortBy'] } };
+      return {
+        ...state,
+        filters: {
+          ...state.filters,
+          sortBy: action.payload as 'default' | 'price-asc' | 'price-desc',
+        },
+      };
+
+    case 'SET_MAX_PRICE':
+      return {
+        ...state,
+        filters: { ...state.filters, maxPrice: action.payload },
+      };
 
     case 'TOGGLE_CART':
       return {
         ...state,
-        isCartOpen: typeof action.payload === 'boolean' ? action.payload : !state.isCartOpen,
+        isCartOpen: action.payload !== undefined ? action.payload : !state.isCartOpen,
       };
-
-    case 'SET_MAX_PRICE':
-      return { ...state, filters: { ...state.filters, maxPrice: action.payload } };
 
     default:
       return state;
   }
 }
 
-interface ShopContextValue {
-  state: ShopState;
+interface ShopContextType {
+  state: State;
   dispatch: React.Dispatch<Action>;
-  totalCartItems: number;
   subtotal: number;
+  totalCartCount: number;
 }
 
-const ShopContext = createContext<ShopContextValue | null>(null);
+const ShopContext = createContext<ShopContextType | undefined>(undefined);
 
-export function ShopProvider({ children }: { children: ReactNode }) {
+export const ShopProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(shopReducer, initialState);
 
-  const totalCartItems = state.cart.reduce((sum, item) => sum + item.quantity, 0);
   const subtotal = state.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const totalCartCount = state.cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <ShopContext.Provider value={{ state, dispatch, totalCartItems, subtotal }}>
+    <ShopContext.Provider value={{ state, dispatch, subtotal, totalCartCount }}>
       {children}
     </ShopContext.Provider>
   );
-}
+};
 
-export function useShop(): ShopContextValue {
-  const ctx = useContext(ShopContext);
-  if (!ctx) {
-    throw new Error('useShop must be used inside a ShopProvider');
+export const useShop = () => {
+  const context = useContext(ShopContext);
+  if (!context) {
+    throw new Error('useShop must be used within a ShopProvider');
   }
-  return ctx;
-}
+  return context;
+};
